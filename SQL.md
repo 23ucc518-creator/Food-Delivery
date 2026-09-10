@@ -267,6 +267,223 @@ ORDER BY order_count DESC;
 
 Order volume is remarkably even across the day — every slot from 6 AM to midnight holds roughly 1,000–1,190 orders, with 14:00–16:00 slightly ahead at 1,188. The 00:00–02:00 slot is the only outlier, with just 12 orders — showing demand is steady all day but drops off almost completely late at night.
 
+---
+
+### Q9. Monthly Sales Trend — comparing each month to the previous one
+ 
+```sql
+SELECT
+EXTRACT(YEAR FROM order_date) as year,
+EXTRACT(MONTH FROM order_date) as month,
+SUM(total_amount) as total_sale,
+LAG(SUM(total_amount), 1) OVER(ORDER BY EXTRACT(YEAR FROM order_date), EXTRACT(MONTH FROM order_date)) as prev_month_sale,
+ROUND((SUM(total_amount)
+-LAG(SUM(total_amount), 1) OVER(ORDER BY EXTRACT(YEAR FROM order_date), EXTRACT(MONTH FROM order_date)))*100/
+LAG(SUM(total_amount), 1) OVER(ORDER BY EXTRACT(YEAR FROM order_date), EXTRACT(MONTH FROM order_date)),2) as growth_pct
+FROM orders
+GROUP BY year,month
+```
+ 
+**Result:**
+
+<img width="440" height="301" alt="image" src="https://github.com/user-attachments/assets/0faaa6c4-1f1f-4a0a-839b-06ec482d9374" />
+
+
+
+
+
+**Explanation:**
+
+2023 shows healthy month-to-month fluctuation, swinging between roughly -16% and +23% with no clear long-term decline. January 2024 shows a dramatic -97.10% drop (₹7,944 vs ₹2.7L+ in December) — this is almost certainly the dataset simply ending mid-January 2024 rather than a real business collapse, worth calling out as a data-boundary artifact, not a genuine trend.
+
+---
+
+### Q10. What is the most frequently ordered dish in each city?
+ 
+```sql
+WITH best_item as (select r.city,o.order_item,COUNT() as total_order,
+RANK() OVER(PARTITION BY r.city order by COUNT() DESC) as ranking
+from orders as o
+LEFT JOIN restaurants as r on o.restaurant_id=r.restaurant_id
+GROUP BY  o.order_item,r.city)
+SELECT * FROM best_item where ranking = 1 or ranking =2 ORDER BY  ranking
+```
+ 
+**Result:**
+
+<img width="425" height="245" alt="image" src="https://github.com/user-attachments/assets/1a9a8aea-d25e-4d21-b0a1-fa4f72952e16" />
+
+
+
+
+
+**Explanation:**
+
+Mumbai has by far the highest single-dish volume — Paneer Butter Masala at 363 orders — more than double any other city's top dish. Chicken Biryani and Paneer Butter Masala dominate across most cities, appearing as either the #1 or #2 dish in 4 of 5 cities.
+
+---
+
+### Q11. Which dishes see spikes in demand during certain months or seasons, and are there items with consistent year-round demand versus seasonal ones?
+ 
+```sql
+SELECT * FROM
+(SELECT
+order_item,
+seasons,
+COUNT(order_id) as total_orders,
+RANK() OVER(PARTITION BY seasons order by COUNT(order_id) DESC) as ranking
+FROM
+(
+SELECT *,
+EXTRACT(MONTH FROM order_date) as month,
+CASE
+WHEN EXTRACT(MONTH FROM order_date) BETWEEN 8 AND 10 THEN 'Spring'
+WHEN EXTRACT(MONTH FROM order_date) > 2 AND
+EXTRACT(MONTH FROM order_date) < 8 THEN 'Summer'
+ELSE 'Winter'
+END as seasons
+FROM orders where order_status='Completed') as t
+group by order_item,seasons) as q
+where ranking =1 or ranking=2 order by seasons
+```
+ 
+**Result:**
+
+<img width="402" height="180" alt="image" src="https://github.com/user-attachments/assets/49f394cd-d533-4176-8313-4adbc80c8b1e" />
+
+
+
+
+
+**Explanation:**
+
+Paneer Butter Masala peaks hardest in summer (323 orders), while Chicken Biryani stays a strong #2 across Spring, Summer, and Winter alike — showing it's a consistent year-round favorite rather than a seasonal spike item. Masala Dosa leads only in Spring, suggesting a more seasonal demand pattern.
+
+---
+
+### Q12. What are peak order days (day of week)?
+ 
+```sql
+SELECT DAYNAME(order_date) as dayname,
+COUNT(order_id) as total_order,
+DENSE_RANK() OVER(ORDER BY COUNT(order_id))  as ranking
+FROM orders GROUP BY dayname
+```
+ 
+**Result:**
+
+<img width="277" height="182" alt="image" src="https://github.com/user-attachments/assets/00925344-1d45-4578-be52-0b1611367717" />
+
+
+
+
+
+**Explanation:**
+
+Sunday is the clear peak day (1,491 orders), followed by Wednesday and Friday. Order volume stays fairly tight across the week overall (1,391–1,491), with weekends and mid-week showing only a modest edge over other days.
+
+---
+
+### Q13. Find the average order value per customer who has placed more than 30 orders?
+ 
+```sql
+SELECT
+o.customer_id,
+c.customer_name,
+ROUND(AVG(o.total_amount),2) as aov,
+RANK() OVER(ORDER BY ROUND(AVG(o.total_amount) ,2) DESC) as ranking
+FROM orders as o
+JOIN customers as c
+ON c.customer_id = o.customer_id
+GROUP BY o.customer_id
+HAVING  COUNT(order_id) > 30
+LIMIT 5;
+```
+ 
+**Result:**
+
+<img width="371" height="137" alt="image" src="https://github.com/user-attachments/assets/4c5a8912-32ba-4300-a513-69613811beea" />
+
+
+
+
+
+
+**Explanation:**
+
+Rahul Verma has the highest AOV (₹338.36) among high-frequency customers, followed closely by Ritu Patel, Aman Gupta, Sneha Desai, and Neha Joshi — all within a tight ₹331–₹338 range, showing consistent spending behavior among the platform's most loyal/frequent customers.
+
+---
+
+### Q14. Rank each city based on the total revenue ?
+ 
+```sql
+SELECT
+r.city,
+SUM(total_amount) as total_revenue,
+RANK() OVER(ORDER BY SUM(total_amount) DESC) as city_rank
+FROM orders as o
+JOIN
+restaurants as r
+ON o.restaurant_id = r.restaurant_id
+GROUP BY r.city
+```
+ 
+**Result:**
+
+<img width="301" height="136" alt="image" src="https://github.com/user-attachments/assets/ae51a424-8292-4261-b9d0-3726d309823f" />
+
+
+
+
+
+
+**Explanation:**
+
+Mumbai dominates with ₹15.2L in revenue — more than double Bengaluru (₹7.2L), the next closest city. Delhi, Hyderabad, and Chennai trail far behind at ₹3L–₹3.7L each, confirming Mumbai as the platform's core market by a wide margin.
+
+---
+
+### Q15.List the customers who have spent more than 10K in total on food orders?
+ 
+```sql
+SELECT
+o.customer_id,
+c.customer_name,
+SUM(o.total_amount) as total_spent
+FROM orders as o
+JOIN customers as c
+ON c.customer_id = o.customer_id
+GROUP BY o.customer_id
+HAVING SUM(o.total_amount) > 10000
+```
+ 
+**Result:**
+
+<img width="322" height="175" alt="image" src="https://github.com/user-attachments/assets/49e42da2-28b7-45e6-9f10-678bdb388838" />
+
+
+
+
+
+
+**Explanation:**
+
+7 customers cross the ₹10K mark, led by Nikhil Jain at ₹1,67,844 — nearly 3x higher than the next closest customer (Arjun Mehta, ₹65,044). The rest (Sameer Khan, Priya Sharma, Vikram Singh, Anjali Saxena, Divya Nair) cluster more tightly between ₹55K–₹65K, making Nikhil Jain a clear standout high-value customer.
+
+---
+
+## ✅ Conclusion
+ 
+1. **Fulfillment and delivery are two separate failure points** — 2.5% of orders never leave the restaurant, and a further 8.17% of fulfilled orders fail during delivery — meaning restaurant reliability and delivery execution need to be tracked and improved independently.
+2. **Mumbai drives the business** — generating over 2x the revenue of the next-closest city, making it the platform's most critical market to protect and invest in.
+3. **Demand is stable, not spiky** — orders are spread evenly across days and time slots, so operational planning should focus on consistent capacity rather than peak-hour surges.
+4. **A small customer segment holds outsized value** — a handful of top spenders and "Gold" customers contribute disproportionately to revenue, making retention of this group a high-priority lever.
+5. **Churn correlates with poor delivery experience** — customers who stopped ordering after 2023 had above-average delivery failure rates, suggesting delivery quality (not just pricing) is a real churn driver worth addressing.
+
+**Overall:** This project says: the platform's core operations — restaurant fulfillment, delivery execution, and demand — run smoothly and consistently at scale, with no major systemic breakdown. The real value of this analysis isn't "everything is broken," it's that it pinpoints specific, fixable levers: a short list of underperforming riders and restaurants, a small but identifiable set of churned customers linked to delivery quality, and a heavy revenue concentration in Mumbai that's either a strength to double down on or a risk to diversify against. 
+
+
 
 
 ```
