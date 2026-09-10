@@ -16,10 +16,10 @@ The dataset was imported from CSV into MySQL Workbench, where the 5 tables below
 
 ## 🖇️ ER Diagram
 
-![ER Diagram](<img width="1247" height="867" alt="image" src="https://github.com/user-attachments/assets/9a944b7a-a9d7-4a60-9b75-a68b253c06dd" />
-)
 
-*(Add the ER diagram image to your repo and update the path above — e.g. `images/er_diagram.png`.)*
+<img width="800" height="500" alt="image" src="https://github.com/user-attachments/assets/b8b65ad3-cc24-4e0e-a629-02b91778be20" />
+
+
 
 ## 🧹 Data Cleaning & Validation
 
