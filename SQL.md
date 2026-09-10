@@ -28,13 +28,7 @@ Before analysis, two data quality checks were run on the `deliveries` table:
 - **`delivery_status` contained an unexpected third value, `'Order'`**, alongside `Delivered` and `Not Delivered`. Investigation showed `'Order'` rows had `delivery_time = 00:00:00` (a placeholder, same as `Not Delivered`), had a `rider_id` assigned, and appeared across every rider in proportions consistent with their overall delivery volume — indicating inconsistent labeling of the same failure outcome rather than a genuine third state. These rows were consolidated into `Not Delivered`.
 - **`order_status` and `delivery_status` were confirmed to represent two separate, sequential pipeline stages, not overlapping data.** A `LEFT JOIN` between `orders` and `deliveries` showed that all 250 orders with `order_status = 'Not Fulfilled'` had no corresponding row in `deliveries` at all — meaning a delivery is never attempted for an order the restaurant never fulfilled. This confirms a two-stage funnel: **restaurant fulfillment → delivery execution.**
 
-```
-Total Orders (9,926)
-   ├── Not Fulfilled (250, ~2.5%) — restaurant-side, order never handed off
-   └── Completed (9,676, ~97.5%) — passed to delivery stage
-          ├── Delivered (8,885, ~91.8% of completed)
-          └── Not Delivered (791, ~8.2% of completed)
-```
+
 
 ## ❓ Business Questions Answered
 
