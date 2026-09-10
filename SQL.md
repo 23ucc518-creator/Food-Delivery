@@ -158,8 +158,116 @@ WHERE EXTRACT(YEAR FROM order_date) = 2024
 
 9 customers, including Aman Gupta, Sneha Desai, and Karan Kapoor, ordered in 2023 but placed none in 2024. These are clear churn candidates for re-engagement.
 
+---
 
+### Q6.Among churned customers, how often did their orders fail at the delivery stage?
+ 
+```sql
+WITH churn AS (SELECT DISTINCT c.customer_id, c.customer_name,COUNT(*) as total_orders
+FROM orders AS o
+LEFT JOIN customers AS c ON o.customer_id = c.customer_id
+WHERE EXTRACT(YEAR FROM o.order_date) = 2023
+AND o.customer_id NOT IN (
+SELECT customer_id FROM orders
+WHERE EXTRACT(YEAR FROM order_date) = 2024)
+group by c.customer_id
+)
+select c.customer_id,c.customer_name,c.total_orders,
+SUM(CASE WHEN d.delivery_status='Not Delivered' THEN 1 ELSE 0 END) as notdelivered_orders,
+ROUND(SUM(CASE WHEN  d.delivery_status='Not Delivered' THEN 1 ELSE 0 END)100/COUNT(),2) as delivery_failure_rate
+FROM orders AS o
+JOIN churn AS c ON o.customer_id = c.customer_id
+LEFT JOIN deliveries AS d ON o.order_id = d.order_id
+group by c.customer_id,c.customer_name
+```
+ 
+**Result:**
+
+<img width="627" height="231" alt="image" src="https://github.com/user-attachments/assets/40cc33c2-8a40-48cb-a164-c3117816c93b" />
+
+
+
+
+
+**Explanation:**
+
+Failure rates vary widely — Rohan Iyer had the worst experience at 16.32% (31 of 190 orders), while Ashish Mishra and Megha Sinha had zero failures but also very few orders (2 and 1). Most others (Aman Gupta, Karan Kapoor, Kavita Malhotra) sit between 6–8%, notably higher than the 8.17% average, suggesting delivery issues may have contributed to their churn.
+
+---
+
+### Q7. Customer Segmentation — Gold vs Silver based on total spend vs. average customer spend
+ 
+```sql
+WITH customer_spend AS (
+    SELECT customer_id,
+           SUM(total_amount) AS total_spent,
+           COUNT(order_id) AS total_orders
+    FROM orders
+    WHERE order_status = 'Completed'
+    GROUP BY customer_id
+)
+SELECT customer_id,
+       total_spent,
+       total_orders,
+       CASE 
+           WHEN total_spent > (SELECT AVG(total_spent) FROM customer_spend) THEN 'Gold'
+           ELSE 'Silver'
+       END AS cx_category
+FROM customer_spend
+ORDER BY total_spent DESC;
+```
+ 
+**Result:**
+
+<img width="402" height="351" alt="image" src="https://github.com/user-attachments/assets/8898c311-f6ff-44bd-a8d5-1e7927399b53" />
+
+
+
+
+
+**Explanation:**
+
+Customers 17, 22, 19, 20, 18, 16, and 21 are Gold, each spending ₹1.38L–₹1.6L across 450+ orders. Silver customers (1, 12, 10, 3, 11, 2, 13, 14) spend roughly ₹52K–₹63K with about half as many orders. The split is now clean and proportional — Gold customers have both higher spend and more orders, confirming this segmentation is genuinely separating high-value from low-value customers, unlike the earlier flawed version.
+
+---
+
+### Q8. Popular Time Slots — during which 2-hour windows are most orders placed?
+ 
+```sql
+SELECT
+CASE
+WHEN EXTRACT(HOUR FROM order_time) BETWEEN 0 AND 1 THEN '00:00 - 02:00'
+WHEN EXTRACT(HOUR FROM order_time) BETWEEN 2 AND 3 THEN '02:00 - 04:00'
+WHEN EXTRACT(HOUR FROM order_time) BETWEEN 4 AND 5 THEN '04:00 - 06:00'
+WHEN EXTRACT(HOUR FROM order_time) BETWEEN 6 AND 7 THEN '06:00 - 08:00'
+WHEN EXTRACT(HOUR FROM order_time) BETWEEN 8 AND 9 THEN '08:00 - 10:00'
+WHEN EXTRACT(HOUR FROM order_time) BETWEEN 10 AND 11 THEN '10:00 - 12:00'
+WHEN EXTRACT(HOUR FROM order_time) BETWEEN 12 AND 13 THEN '12:00 - 14:00'
+WHEN EXTRACT(HOUR FROM order_time) BETWEEN 14 AND 15 THEN '14:00 - 16:00'
+WHEN EXTRACT(HOUR FROM order_time) BETWEEN 16 AND 17 THEN '16:00 - 18:00'
+WHEN EXTRACT(HOUR FROM order_time) BETWEEN 18 AND 19 THEN '18:00 - 20:00'
+WHEN EXTRACT(HOUR FROM order_time) BETWEEN 20 AND 21 THEN '20:00 - 22:00'
+WHEN EXTRACT(HOUR FROM order_time) BETWEEN 22 AND 23 THEN '22:00 - 00:00'
+END AS time_slot,
+COUNT(order_id) AS order_count
+FROM Orders
+GROUP BY time_slot
+ORDER BY order_count DESC;
+```
+ 
+**Result:**
+
+<img width="226" height="246" alt="image" src="https://github.com/user-attachments/assets/3202a9d3-6851-4d40-90a2-2397118c86ed" />
+
+
+
+
+
+**Explanation:**
+
+Order volume is remarkably even across the day — every slot from 6 AM to midnight holds roughly 1,000–1,190 orders, with 14:00–16:00 slightly ahead at 1,188. The 00:00–02:00 slot is the only outlier, with just 12 orders — showing demand is steady all day but drops off almost completely late at night.
 
 
 
 ```
+
