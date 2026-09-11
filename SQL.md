@@ -366,13 +366,15 @@ Paneer Butter Masala peaks hardest in summer (323 orders), while Chicken Biryani
 ```sql
 SELECT DAYNAME(order_date) as dayname,
 COUNT(order_id) as total_order,
-DENSE_RANK() OVER(ORDER BY COUNT(order_id))  as ranking
-FROM orders GROUP BY dayname
+DENSE_RANK() OVER(ORDER BY COUNT(order_id) DESC)  as ranking
+FROM orders 
+GROUP BY dayname
 ```
  
 **Result:**
 
-<img width="277" height="182" alt="image" src="https://github.com/user-attachments/assets/00925344-1d45-4578-be52-0b1611367717" />
+<img width="272" height="182" alt="image" src="https://github.com/user-attachments/assets/6c54a9e4-3475-45aa-a5e9-c2dc4e6471ca" />
+
 
 
 
