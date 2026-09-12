@@ -1,0 +1,126 @@
+{
+  "name": "NL to SQL",
+  "nodes": [
+    {
+      "parameters": {
+        "options": {
+          "systemMessage": "You are a SQL expert assistant for a food delivery database. Convert the user's natural language question into a single valid MySQL query.\n\nDATABASE SCHEMA:\n\n1. restaurants\n   - restaurant_id (INT, primary key)\n   - restaurant_name (VARCHAR)\n   - city (VARCHAR)\n   - opening_hour (VARCHAR)\n\n2. customers\n   - customer_id (INT, primary key)\n   - customer_name (VARCHAR)\n   - reg_date (DATE)\n\n3. riders\n   - rider_id (INT, primary key)\n   - rider_name (VARCHAR)\n   - sign_up (DATE)\n\n4. orders\n   - order_id (INT, primary key)\n   - customer_id (INT, foreign key → customers.customer_id)\n   - restaurant_id (INT, foreign key → restaurants.restaurant_id)\n   - order_item (VARCHAR)\n   - order_date (DATE)\n   - order_time (TIME)\n   - order_status (VARCHAR) — values: 'Completed', 'Not Fulfilled'\n   - total_amount (DECIMAL)\n\n5. deliveries\n   - delivery_id (INT, primary key)\n   - order_id (INT, foreign key → orders.order_id)\n   - delivery_status (VARCHAR) — values: 'Delivered', 'Not Delivered'\n   - delivery_time (TIME)\n   - rider_id (INT, foreign key → riders.rider_id)\n\nIMPORTANT BUSINESS LOGIC:\n- order_status and delivery_status are two SEQUENTIAL stages, not independent flags.\n- order_status reflects whether the restaurant fulfilled the order ('Completed' or 'Not Fulfilled').\n- delivery_status only applies to orders that were fulfilled — a 'Not Fulfilled' order has NO matching row in the deliveries table at all.\n- When a question is about delivery performance, you must JOIN orders and deliveries and typically filter for order_status = 'Completed' first, since 'Not Fulfilled' orders never reach the delivery stage.\n\nRULES:\n- Return ONLY the SQL query, with no explanation, no markdown formatting, no backticks.\n- Use standard MySQL syntax.\n- Use table aliases for readability when joining multiple tables.\n- If the question is ambiguous, make the most reasonable interpretation based on the schema above.\nIMPORTANT: You must ALWAYS use the SQL execution tool to actually run your generated query against the database and return the real results. Never just output the SQL query as text without executing it."
+        }
+      },
+      "type": "@n8n/n8n-nodes-langchain.agent",
+      "typeVersion": 3.1,
+      "position": [
+        224,
+        0
+      ],
+      "id": "7d4b89e6-8344-451c-925a-4a015e854a04",
+      "name": "AI Agent"
+    },
+    {
+      "parameters": {
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatGoogleGemini",
+      "typeVersion": 1.1,
+      "position": [
+        96,
+        208
+      ],
+      "id": "4582dff0-b1f7-438d-b81a-3681cb5a2dd7",
+      "name": "Google Gemini Chat Model",
+      "credentials": {
+        "googlePalmApi": {
+          "id": "C9u4INUMldQqUBcY",
+          "name": "Google Gemini(PaLM) Api account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "descriptionType": "manual",
+        "toolDescription": "Use this tool to execute any SQL query against the food delivery MySQL database and get real results back. Always use this tool to run the SQL query you generate — do not just output the SQL as text.",
+        "operation": "executeQuery",
+        "query": "{{ $fromAI('query', 'The SQL query to execute against the database', 'string') }}",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.mySqlTool",
+      "typeVersion": 2.5,
+      "position": [
+        384,
+        208
+      ],
+      "id": "45cdb692-c4be-49e4-905f-e9f93b68d65d",
+      "name": "Execute a SQL query in MySQL",
+      "credentials": {
+        "mySql": {
+          "id": "npZTID6NbbetYD3b",
+          "name": "MySQL account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.chatTrigger",
+      "typeVersion": 1.4,
+      "position": [
+        0,
+        0
+      ],
+      "id": "75ae88da-9026-470f-8610-8efb08eba274",
+      "name": "When chat message received",
+      "webhookId": "22bdd8ad-fb4a-4de4-a542-9731a000df99"
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "Google Gemini Chat Model": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Execute a SQL query in MySQL": {
+      "ai_tool": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "When chat message received": {
+      "main": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": false,
+  "settings": {
+    "executionOrder": "v1",
+    "binaryMode": "separate",
+    "availableInMCP": false
+  },
+  "versionId": "a239735b-d3e5-468f-a0bb-a83dfaed08f3",
+  "meta": {
+    "templateCredsSetupCompleted": true,
+    "instanceId": "06446af1f4225ffd946c4b0b2d55ab625ccde5282af200775c06029677db3d72"
+  },
+  "nodeGroups": [],
+  "id": "bheWkXzHxwhGUAaH",
+  "tags": []
+}
