@@ -15,7 +15,7 @@ The workflow consists of 4 connected nodes:
 
 **Flow:** User asks a question in chat → AI Agent (using Gemini) converts it into a SQL query based on the database schema → the SQL tool executes it against MySQL → Gemini formats the raw result into a clear, human-readable answer → response is returned in chat.
 
-📄 The exported workflow file is available at [`n8n/nl_to_sql_workflow.json`](./n8n/nl_to_sql_workflow.json) — import it directly into n8n to reproduce this agent. The agent's system prompt encodes the same restaurant-fulfillment → delivery funnel logic discovered during the manual SQL analysis, so it knows to check `order_status = 'Completed'` before joining to `deliveries`.
+📄 The exported workflow file is available at [`NL to SQL.json`](./n8n/NL_to_SQL.json) — import it directly into n8n to reproduce this agent. The agent's system prompt encodes the same restaurant-fulfillment → delivery funnel logic discovered during the manual SQL analysis, so it knows to check `order_status = 'Completed'` before joining to `deliveries`.
 
 
 [n8n Workflow]
