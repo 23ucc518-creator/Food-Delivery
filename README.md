@@ -1,4 +1,4 @@
-# 🚴 Food Delivery Analytics — SQL + GenAI Case Study
+# 🚴 Food Delivery Analytics — Case Study
 
 ## 📌 Overview
 
@@ -59,5 +59,9 @@ I also went a step further by building a natural-language-to-SQL agent in n8n, w
 ## ⚠️ Disclaimer
  
 This project is purely academic and was created for learning and portfolio purposes. All data used is **fictional and randomly generated** — it does not reflect any real individuals, restaurants, riders, or companies. It is **not associated with Zomato, Swiggy, or any real food delivery platform**. Any resemblance to real businesses or individuals is completely coincidental.
+
+
+## 👤 Author
+Arjav Jain
 
 ---
