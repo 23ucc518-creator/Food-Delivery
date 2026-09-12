@@ -8,11 +8,11 @@ The dataset consists of 5 relational tables — `orders`, `deliveries`, `custome
 
 ## ✨ Project Highlights
 
-- Modeled a 5-table relational schema in MySQL with correct foreign key ordering and data-type decisions validated against real sample data.
-- Identified and resolved a real-world data quality issue — a mislabeled third `delivery_status` value — by testing hypotheses against the data instead of assuming.
-- Discovered that `order_status` and `delivery_status` represent two independent pipeline stages, confirmed via a `LEFT JOIN` diagnostic, turning one ambiguous metric into a clean two-stage funnel.
-- Answered 15 business questions using JOINs, subqueries, CTEs, and window functions (`RANK()`, `DENSE_RANK()`, `LAG()`).
-- Built a working **NL-to-SQL agent in n8n** (Gemini + MySQL tool) that independently reproduces the same results as the hand-written SQL, verified query-by-query.
+- ✅ Modeled a 5-table relational schema in MySQL with correct foreign key ordering and validated data types.
+- ✅ Identified and resolved a real data quality issue — a mislabeled third `delivery_status` value — by testing hypotheses, not assuming.
+- ✅ Discovered `order_status` and `delivery_status` are two independent pipeline stages, confirmed via a `LEFT JOIN` diagnostic.
+- ✅ Answered 15 business questions using JOINs, subqueries, CTEs, and window functions (`RANK`, `DENSE_RANK`, `LAG`).
+- ✅ Built a working **NL-to-SQL agent in n8n** (Gemini + MySQL tool), verified query-by-query against hand-written SQL.
 
 ## 🛠️ Tools Used
 
