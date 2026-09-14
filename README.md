@@ -44,6 +44,12 @@ Food delivery platforms lose revenue in ways that aren't always obvious from a s
 4. **A small customer segment holds outsized value** — a handful of top spenders and "Gold" customers contribute disproportionately to revenue, making retention a high-priority lever.
 5. **Churn correlates with poor delivery experience** — delivery quality, not just pricing, appears to be a real churn driver.
 
+## 📂 Project Files
+
+- [`SQL.md`](./SQL.md) — All 15 business questions with queries, results, and explanations
+- [`N8N.md`](./N8N.md) — Natural-language-to-SQL agent (n8n + Gemini), with example queries and results
+- [`NL to SQL.json`](./NL%20to%20SQL.json) — Exported n8n workflow, importable directly into n8n
+
 ## 📚 What I Learned
 
 Through this project, I didn't just write SQL queries — I learned how to think like a data analyst. Here's what I practiced:
