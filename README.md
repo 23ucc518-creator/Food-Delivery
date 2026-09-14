@@ -6,6 +6,19 @@ This project analyzes a food delivery platform's order and delivery pipeline usi
 
 The dataset consists of 5 relational tables — `orders`, `deliveries`, `customers`, `restaurants`, and `riders` — modeled and queried entirely in MySQL Workbench.
 
+## 🎯 Problem Statement
+ 
+Food delivery platforms lose revenue in ways that aren't always obvious from a single "orders failed" number — orders can fail for different reasons, at different stages, caused by different parties (the restaurant vs. the rider vs. the customer). Without separating these, a business can't tell which team to fix, which restaurants to review, or which customers are quietly churning.
+ 
+**Core problem this project solves:** Where exactly in the order lifecycle is the platform losing orders and customers, and who (restaurant, rider, or neither) is responsible at each stage?
+ 
+**Approach:**
+1. **Model the pipeline correctly** — build a relational schema that captures the full order journey from placement → restaurant fulfillment → rider delivery.
+2. **Validate the data before trusting it** — an inconsistent status value was found and investigated with evidence rather than assumed away, and two status fields were confirmed to represent genuinely separate pipeline stages before being used in any metric.
+3. **Split blended metrics into attributable ones** — separating "restaurant fulfillment rate" from "delivery success rate" so failures can be traced to the right team instead of one vague number.
+4. **Answer targeted business questions** — revenue drivers, underperforming riders/restaurants, customer segmentation, and churn — using the validated funnel as the foundation.
+5. **Make the analysis accessible** — a natural-language-to-SQL agent (n8n + Gemini) and a Power BI dashboard so non-technical stakeholders can query and view these findings without writing SQL.
+
 ## ✨ Project Highlights
 
 - ✅ Modeled a 5-table relational schema in MySQL with correct foreign key ordering and validated data types.
