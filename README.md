@@ -26,6 +26,7 @@ Food delivery platforms lose revenue in ways that aren't always obvious from a s
 - ✅ Discovered `order_status` and `delivery_status` are two independent pipeline stages, confirmed via a `LEFT JOIN` diagnostic.
 - ✅ Answered 15 business questions using JOINs, subqueries, CTEs, and window functions (`RANK`, `DENSE_RANK`, `LAG`).
 - ✅ Built a working **NL-to-SQL agent in n8n** (Gemini + MySQL tool), verified query-by-query against hand-written SQL.
+- ✅ Secured the NL-to-SQL agent with a read-only database user — tested by asking it to delete data, confirming destructive queries are rejected even if the AI generates them.
 
 ## 🛠️ Tools Used
 
