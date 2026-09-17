@@ -76,6 +76,8 @@ Since the AI Agent generates and executes its own SQL queries, there's a real ri
 
 resulted in Gemini generating the destructive query as expected — but MySQL rejected it outright:
 
+No data was modified. This confirms the safeguard holds even when the AI itself attempts a harmful action, closing a real vulnerability class in agentic AI systems with database access — rather than relying solely on a system prompt instruction telling the model "don't do this," which is advisory and not enforceable on its own.
+
 ## ✅ Why This Matters
 
 Each of these AI-generated results was cross-checked against the equivalent hand-written SQL query from the core analysis — confirming the AI Agent correctly interprets business questions, applies the right joins/filters, and produces accurate results without manual query writing. This demonstrates an applied GenAI layer on top of a traditional SQL analytics project — turning a static query file into an interactive, natural-language BI assistant.
