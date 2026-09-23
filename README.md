@@ -51,6 +51,7 @@ Food delivery platforms lose revenue in ways that aren't always obvious from a s
 
 ## 📂 Project Files
 
+- [`table_creation.md`](./ddl_table_creation.sql) — Table creation queries
 - [`SQL.md`](./SQL.md) — All 15 business questions with queries, results, and explanations
 - [`N8N.md`](./N8N_readme.md) — Natural-language-to-SQL agent (n8n + Gemini), with example queries and results
 - [`NL to SQL.json`](./NL%20to%20SQL.json) — Exported n8n workflow, importable directly into n8n
