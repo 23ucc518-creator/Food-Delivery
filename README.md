@@ -34,7 +34,7 @@ Food delivery platforms lose revenue in ways that aren't always obvious from a s
 - **SQL** — JOINs, subqueries, CTEs, window functions (`RANK`, `DENSE_RANK`, `LAG`), conditional aggregation
 - **n8n** — workflow automation for the natural-language-to-SQL agent
 - **Google Gemini** — LLM powering the NL-to-SQL AI Agent
-- **Power BI** *(planned)* — dashboard visualization layer
+- **Power BI** — dashboard visualization layer
 
 
 ## 🔑 Key Highlights (Findings)
