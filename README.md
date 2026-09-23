@@ -37,6 +37,14 @@ Food delivery platforms lose revenue in ways that aren't always obvious from a s
 - **Power BI** — dashboard visualization layer
 
 
+## 📂 Project Files
+
+- [`table_creation.md`](./ddl_table_creation.sql) — Table creation queries
+- [`SQL.md`](./SQL.md) — All 15 business questions with queries, results, and explanations
+- [`N8N.md`](./N8N_readme.md) — Natural-language-to-SQL agent (n8n + Gemini), with example queries and results
+- [`NL to SQL.json`](./NL%20to%20SQL.json) — Exported n8n workflow, importable directly into n8n
+- [`Order_Karo_dashboard`](./Order_Karo_dashboard.pbix) — the Power BI file (open in Power BI Desktop to interact with filters)
+
 ## 🔑 Key Highlights (Findings)
 
 1. **Fulfillment and delivery are two separate failure points** — restaurant reliability and delivery execution need to be tracked and improved independently.
@@ -48,14 +56,6 @@ Food delivery platforms lose revenue in ways that aren't always obvious from a s
 ## 📊 Dashboard Preview
 <img width="1411" height="793" alt="image" src="https://github.com/user-attachments/assets/95662d0a-6a79-4cea-a74d-8e2f5df2f6e2" />
 
-
-## 📂 Project Files
-
-- [`table_creation.md`](./ddl_table_creation.sql) — Table creation queries
-- [`SQL.md`](./SQL.md) — All 15 business questions with queries, results, and explanations
-- [`N8N.md`](./N8N_readme.md) — Natural-language-to-SQL agent (n8n + Gemini), with example queries and results
-- [`NL to SQL.json`](./NL%20to%20SQL.json) — Exported n8n workflow, importable directly into n8n
-- [`Order_Karo_dashboard`](./Order_Karo_dashboard.pbix) — the Power BI file (open in Power BI Desktop to interact with filters)
 
 ## 📚 What I Learned
 
