@@ -45,6 +45,10 @@ Food delivery platforms lose revenue in ways that aren't always obvious from a s
 4. **A small customer segment holds outsized value** — a handful of top spenders and "Gold" customers contribute disproportionately to revenue, making retention a high-priority lever.
 5. **Churn correlates with poor delivery experience** — delivery quality, not just pricing, appears to be a real churn driver.
 
+## 📊 Dashboard Preview
+<img width="1411" height="793" alt="image" src="https://github.com/user-attachments/assets/95662d0a-6a79-4cea-a74d-8e2f5df2f6e2" />
+
+
 ## 📂 Project Files
 
 - [`SQL.md`](./SQL.md) — All 15 business questions with queries, results, and explanations
