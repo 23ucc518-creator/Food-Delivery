@@ -1,4 +1,4 @@
-# 🚴 Food Delivery Analytics — Case Study
+# 🚴 Food Delivery Analytics — (OrderIT)
 
 ## 📌 Overview
 
