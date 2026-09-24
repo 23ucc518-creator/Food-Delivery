@@ -1,4 +1,4 @@
-# 📊 Power BI Dashboard — Food Delivery Analytics
+# 📊 Power BI Dashboard — Food Delivery Analytics(Order Karo)
 
 This dashboard visualizes the food delivery platform's order, delivery, restaurant, and rider data across two pages: **Business Overview** and **Delivery Operations & Performance**. It sits on top of the same `orders`, `deliveries`, `restaurants`, `customers`, and `riders` tables used for the SQL analysis in this repo.
 
