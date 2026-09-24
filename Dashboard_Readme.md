@@ -105,3 +105,6 @@ RETURN
 - **Sidebar navigation** is a custom-built element (shapes + page-navigation buttons), not a native Power BI feature — copied across all report pages for a consistent multi-page app feel.
 
 ---
+
+- [`Order_Karo_dashboard`](./Order_Karo_dashboard.pbix) — the Power BI file (open in Power BI Desktop to interact with filters)
+
