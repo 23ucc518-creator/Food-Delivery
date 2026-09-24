@@ -55,7 +55,8 @@ Food delivery platforms lose revenue in ways that aren't always obvious from a s
 5. **Churn correlates with poor delivery experience** — delivery quality, not just pricing, appears to be a real churn driver.
 
 ## 📊 Dashboard Preview
-<img width="1411" height="793" alt="image" src="https://github.com/user-attachments/assets/95662d0a-6a79-4cea-a74d-8e2f5df2f6e2" />
+<img width="1406" height="795" alt="image" src="https://github.com/user-attachments/assets/d40c0243-73c5-438f-9ce7-6115f52f269f" />
+
 
 
 ## 📚 What I Learned
