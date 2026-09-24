@@ -43,6 +43,7 @@ Food delivery platforms lose revenue in ways that aren't always obvious from a s
 - [`SQL.md`](./SQL.md) — All 15 business questions with queries, results, and explanations
 - [`N8N.md`](./N8N_readme.md) — Natural-language-to-SQL agent (n8n + Gemini), with example queries and results
 - [`NL to SQL.json`](./NL%20to%20SQL.json) — Exported n8n workflow, importable directly into n8n
+- [`Dashboard_Readme.md`](./Dashboard_Readme.md) — Dashboard results and queries
 - [`Order_Karo_dashboard`](./Order_Karo_dashboard.pbix) — the Power BI file (open in Power BI Desktop to interact with filters)
 - [`screenshots`](./screenshots) — Screenshots of dashboard
 
